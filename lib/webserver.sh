@@ -6,19 +6,32 @@
 # created by bibi
 #######################
 set -euo pipefail
+
 install_webserver() {
-    local server
-    server=$(whiptail --backtitle "$BACKTITLE" --title "Web Server" \
-        --radiolist "Select software:" 10 60 2 \
-        "nginx" "High performance proxy" ON \
-        "apache2" "Robust HTTP server" OFF \
+    local choice
+    choice=$(whiptail --backtitle "$BACKTITLE" --title " Web Server Installation " \
+        --radiolist "Choose a web server to install:" $H $W 2 \
+        "nginx" "Lightweight and high-performance" ON \
+        "apache2" "Feature-rich and modular" OFF \
         3>&1 1>&2 2>&3) || return
 
-    (
-        echo 20; sleep 1; apt-get update -y > /dev/null 2>&1
-        echo 50; apt-get install -y "$server" > /dev/null 2>&1
-        echo 80; systemctl enable --now "$server" > /dev/null 2>&1
-        echo 100; sleep 1
-    ) | whiptail --backtitle "$BACKTITLE" --gauge "Installing $server..." 10 60 0
-    whiptail --msgbox "$server installed and started." 10 60
+    if whiptail --yesno "Are you sure you want to install $choice?" 10 60; then
+        {
+            echo 10; sleep 0.5
+            echo "XXX\n Updating package lists... \nXXX"
+            apt-get update -y > /dev/null 2>&1
+            
+            echo 40; sleep 0.5
+            echo "XXX\n Installing $choice... \nXXX"
+            apt-get install -y "$choice" > /dev/null 2>&1
+            
+            echo 80; sleep 0.5
+            echo "XXX\n Starting service... \nXXX"
+            systemctl enable --now "$choice" > /dev/null 2>&1
+            
+            echo 100; sleep 0.5
+        } | whiptail --backtitle "$BACKTITLE" --gauge "Preparing installation..." 10 60 0
+        
+        whiptail --msgbox "$choice has been successfully installed and started." 10 60
+    fi
 }
