@@ -7,15 +7,12 @@
 #######################
 set -euo pipefail
 
-. lib/hostname.sh
-. lib/network.sh
-. lib/dns.sh
-# shellcheck source=lib/webserver.sh
-. lib/webserver.sh
-# shellcheck source=lib/tls.sh
-. lib/tls.sh
+. ./lib/hostname.sh
+. ./lib/network.sh
+. ./lib/dns.sh
+. ./lib/webserver.sh
+. ./lib/tls.sh
 
-# Global Constants
 readonly BACKTITLE="Server Setup v1.0 - Systems Automation"
 readonly H=20
 readonly W=75
