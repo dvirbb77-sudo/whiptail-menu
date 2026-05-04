@@ -29,6 +29,14 @@ check_root() {
         exit 1
     fi
 }
+show_summary() {
+    local msg="Configuration Summary:\n\n"
+    msg="${msg}Hostname: $(hostname)\n"
+    msg="${msg}Web Server: $(systemctl is-active nginx || systemctl is-active apache2)\n"
+    msg="${msg}Cert Path: /etc/ssl/certs/server.crt\n"
+    
+    whiptail --backtitle "$BACKTITLE" --title " Final Report " --msgbox "$msg" 15 60
+}
 #########################################
 # main -_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_-_
 #########################################
@@ -57,7 +65,7 @@ main() {
             *) continue ;;
         esac
     done
-
+    show_summary
     whiptail --backtitle "$BACKTITLE" --msgbox "Session Ended." 10 60
     clear
     return 0
