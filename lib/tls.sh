@@ -45,7 +45,7 @@ apply_webserver_tls() {
     local cert=$3
 
     {
-        echo 20; echo "XXX\n Configuring $server for HTTPS... \nXXX"; sleep 1
+        echo 20; printf 'XXX\n Configuring %s for HTTPS... \nXXX\n' "$server"; sleep 1
         
         if [[ "$server" == "nginx" ]]; then
             local conf="/etc/nginx/sites-available/default"
@@ -62,7 +62,7 @@ apply_webserver_tls() {
             a2ensite default-ssl.conf > /dev/null 2>&1
         fi
 
-        echo 70; echo "XXX\n Reloading $server... \nXXX"; sleep 1
+        echo 70; printf 'XXX\n Reloading %s... \nXXX\n' "$server"; sleep 1
         systemctl restart "$server"
         echo 100
     } | whiptail --backtitle "$BACKTITLE" --gauge "Applying TLS Configuration..." 10 60 0

@@ -14,7 +14,7 @@ is_valid_ipv4() {
 configure_network() {
     local mode
     mode=$(whiptail --backtitle "$BACKTITLE" --title " Network Configuration " \
-        --menu "Choose connection type:" $H $W 2 \
+        --menu "Choose connection type:" "$H" "$W" 2 \
         "DHCP" "Automatic IP assignment" \
         "Static" "Manual IP assignment" \
         3>&1 1>&2 2>&3) || return
